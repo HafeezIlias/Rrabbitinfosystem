@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    style="@style/ModernCard"
+    android:layout_margin="8dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
+
+        <!-- Rabbit Avatar -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            app:cardCornerRadius="28dp"
+            app:cardElevation="2dp"
+            android:layout_marginEnd="16dp">
+
+            <ImageView
+                android:id="@+id/rabbit_avatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/app_logo"
+                android:scaleType="centerCrop"
+                android:background="@color/colorSurfaceVariant"
+                android:padding="12dp"
+                android:tint="@color/colorPrimary" />
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Rabbit Information -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/rabbit_id_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Rabbit #001"
+                style="@style/ModernTitle"
+                android:layout_marginBottom="4dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="2dp">
+
+                <TextView
+                    android:id="@+id/rabbit_breed"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Dutch Rabbit"
+                    style="@style/ModernSubtitle" />
+
+                <TextView
+                    android:id="@+id/rabbit_age"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="6 months"
+                    style="@style/ModernCaption"
+                    android:background="@drawable/modern_card_background"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="4dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <!-- Health Status Indicator -->
+                <View
+                    android:id="@+id/health_indicator"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:background="@drawable/modern_card_background"
+                    android:backgroundTint="@color/colorSuccess"
+                    android:layout_marginEnd="8dp" />
+
+                <TextView
+                    android:id="@+id/rabbit_status"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Healthy"
+                    style="@style/ModernCaption"
+                    android:textColor="@color/colorSuccess" />
+
+                <TextView
+                    android:id="@+id/last_updated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2 days ago"
+                    style="@style/ModernCaption" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Action Button -->
+        <Button
+            android:id="@+id/textViewOptions"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="12dp"
+            android:text="Options"
+            android:textSize="12sp"
+            android:textAllCaps="false"
+            android:background="@drawable/outline_button_primary_background"
+            android:textColor="@color/colorPrimary"
+            android:padding="8dp" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

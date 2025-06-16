@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical"
+    tools:context=".fragments.MatingFragment">
+
+
+    <TextView
+        android:id="@+id/textViewTop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Profile"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/rabbit_id_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+
+            android:hint="Rabbit ID (e.g., R001)"
+            android:padding="12dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/hintTextColor"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/breed_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+
+            android:hint="Breed (e.g., New Zealand White)"
+            android:padding="12dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/hintTextColor"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/color_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+
+            android:hint="Color"
+            android:padding="12dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/hintTextColor"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/weight_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+
+            android:hint="Weight (kg)"
+            android:inputType="numberDecimal"
+            android:padding="12dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/hintTextColor"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/dob_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+
+            android:hint="Date of Birth (YYYY-MM-DD)"
+            android:padding="12dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/hintTextColor"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/father_id_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+
+            android:hint="Father ID"
+            android:padding="12dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/hintTextColor"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/mother_id_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+
+            android:hint="Mother ID"
+            android:padding="12dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/hintTextColor"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/observations_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+
+            android:hint="Observations"
+            android:textColor="@color/black"
+            android:textColorHint="@color/hintTextColor"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/observations_edit3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+
+            android:hint="Observations"
+            android:textColor="@color/black"
+            android:textColorHint="@color/hintTextColor"
+            android:visibility="visible" />
+    </LinearLayout>
+
+</LinearLayout>

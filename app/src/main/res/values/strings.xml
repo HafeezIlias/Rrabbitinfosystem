@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Rabbit Management System</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="forget_password">Forgot Password?</string>
+    <string name="no_account">Don,t have account? Register</string>
+    <string name="doctor_reg">Don\'t have account? Register here.</string>
+    <string name="have_account">Have account? Login here.</string>
+    <string name="button_reset_link">Get Reset Link</string>
+    <string name="reset_link_instruction">Enter email to get reset link(make sure email should exist)</string>
+    <string name="resetLink">Reset link send to your email</string>
+    <string name="password_updated_successfully">Password updated successfully</string>
+    <string name="notification_enabled">Notifications enabled successfully.</string>
+    <string name="loading">Loading...</string>
+    <string name="change_password">Chnage Password</string>
+    <string name="share_app">Share app</string>
+    <string name="access_successful">Access successful</string>
+    <string name="access_failed">Access failed</string>
+    <string name="unBlocking">Unblocking</string>
+    <string name="unBlockingMessage">"Unblock user : "</string>
+    <string name="blocking">Blocking</string>
+    <string name="blockingMessage">"BLock user : "</string>
+    <string name="accountCopied">UID copied</string>
+    <string name="current_key_required">Current key required</string>
+    <string name="new_key_required">New key required</string>
+    <string name="key_updated_successfully">Key updated successfully</string>
+    <string name="incorrect_current_key">Incorrect current key</string>
+    <string name="enter_admin_access_key">ENter admin access key</string>
+    <string name="enter_key">Enter key</string>
+    <string name="get_access">get access</string>
+
+</resources>
