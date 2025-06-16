@@ -137,14 +137,14 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="0"
-                                android:textSize="24sp"
+                                android:textSize="20sp"
                                 android:textStyle="bold"
                                 android:textColor="@color/colorPrimary" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Rabbits"
+                                android:text="Total"
                                 style="@style/ModernCaption" />
 
                         </LinearLayout>
@@ -161,7 +161,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="0"
-                                android:textSize="24sp"
+                                android:textSize="20sp"
                                 android:textStyle="bold"
                                 android:textColor="@color/colorSuccess" />
 
@@ -181,11 +181,35 @@
                             android:gravity="center">
 
                             <TextView
+                                android:id="@+id/txtSickCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textSize="20sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/colorError" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Sick"
+                                style="@style/ModernCaption" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+                            <TextView
                                 android:id="@+id/txtRecentCount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="0"
-                                android:textSize="24sp"
+                                android:textSize="20sp"
                                 android:textStyle="bold"
                                 android:textColor="@color/colorSecondary" />
 
@@ -198,6 +222,89 @@
                         </LinearLayout>
 
                     </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- Filter Card -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/filterCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/ModernCard"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Filter Reports"
+                        style="@style/ModernTitle"
+                        android:layout_marginBottom="12dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <Spinner
+                            android:id="@+id/spinnerFilterMonth"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/edit_text_background"
+                            android:padding="12dp" />
+
+                        <Spinner
+                            android:id="@+id/spinnerFilterYear"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/edit_text_background"
+                            android:padding="12dp" />
+
+                        <Button
+                            android:id="@+id/btnApplyFilter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:layout_marginStart="8dp"
+                            android:background="@color/colorPrimary"
+                            android:text="Apply"
+                            android:textColor="@color/white"
+                            android:paddingLeft="16dp"
+                            android:paddingRight="16dp" />
+
+                        <Button
+                            android:id="@+id/btnClearFilter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:layout_marginStart="4dp"
+                            android:background="@color/hintTextColor"
+                            android:text="Clear"
+                            android:textColor="@color/white"
+                            android:paddingLeft="12dp"
+                            android:paddingRight="12dp" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/txtFilterStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Showing all data"
+                        style="@style/ModernCaption"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/colorPrimary" />
 
                 </LinearLayout>
 

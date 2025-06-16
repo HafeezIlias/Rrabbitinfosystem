@@ -23,7 +23,7 @@ try {
     $database = new Database();
     $db = $database->getConnection();
 
-    // Verify rabbit exists
+    // Verify that the rabbit exists
     $query = "SELECT id FROM rabbits WHERE rabbit_id = :rabbit_id";
     $stmt = $db->prepare($query);
     $stmt->bindParam(":rabbit_id", $data->rabbit_id);
@@ -34,18 +34,27 @@ try {
     }
 
     // Insert weight record
-    $query = "INSERT INTO weight_records (rabbit_id, weight, date) 
-              VALUES (:rabbit_id, :weight, :date)";
+    $query = "INSERT INTO weight_records (rabbit_id, weight, date, notes, recorded_by, created_at) 
+              VALUES (:rabbit_id, :weight, :date, :notes, :recorded_by, NOW())";
     
     $stmt = $db->prepare($query);
-    $stmt->bindParam(":rabbit_id", $data->rabbit_id);
-    $stmt->bindParam(":weight", $data->weight);
-    $stmt->bindParam(":date", $data->date);
-
+    
+    $rabbit_id = $data->rabbit_id;
+    $weight = $data->weight;
+    $date = $data->date;
+    $notes = $data->notes ?? '';
+    $recorded_by = $data->recorded_by ?? '';
+    
+    $stmt->bindParam(":rabbit_id", $rabbit_id);
+    $stmt->bindParam(":weight", $weight);
+    $stmt->bindParam(":date", $date);
+    $stmt->bindParam(":notes", $notes);
+    $stmt->bindParam(":recorded_by", $recorded_by);
+    
     if ($stmt->execute()) {
         sendResponse(true, "Weight record added successfully");
     } else {
-        sendResponse(false, "Unable to add weight record");
+        sendResponse(false, "Failed to add weight record");
     }
 
 } catch (Exception $e) {

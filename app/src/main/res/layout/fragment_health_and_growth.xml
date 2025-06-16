@@ -1,39 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="10dp"
-    android:orientation="vertical"
     android:background="@color/background"
-    tools:context=".fragments.MatingFragment">
-
+    android:orientation="vertical"
+    tools:context=".fragments.HealthAndGrowthFragment">
 
     <TextView
         android:id="@+id/textViewTop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:background="@color/colorPrimary"
         android:gravity="center"
-        android:text="Health and Growth information"
-        android:textColor="@color/black" />
+        android:padding="10dp"
+        android:text="Health and Growth"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <!-- Add Health Record Section -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/edit_text_background"
+            android:orientation="vertical"
+            android:padding="15dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add New Health Record"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/editTextRecordDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_text_background"
+                android:clickable="true"
+                android:focusable="false"
+                android:hint="Record Date (YYYY-MM-DD)"
+                android:padding="12dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/hintTextColor" />
+
+            <EditText
+                android:id="@+id/editTextHealthStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_text_background"
+                android:hint="Health Status (Healthy, Sick, Recovering, etc.)"
+                android:padding="12dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/hintTextColor" />
+
+            <EditText
+                android:id="@+id/editTextSymptoms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_text_background"
+                android:hint="Symptoms (if any)"
+                android:lines="2"
+                android:padding="12dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/hintTextColor" />
+
+            <EditText
+                android:id="@+id/editTextDiagnosis"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_text_background"
+                android:hint="Diagnosis (if applicable)"
+                android:lines="2"
+                android:padding="12dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/hintTextColor" />
+
+            <EditText
+                android:id="@+id/editTextTreatment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_text_background"
+                android:hint="Treatment Given"
+                android:lines="2"
+                android:padding="12dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/hintTextColor" />
+
+            <EditText
+                android:id="@+id/editTextVetName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_text_background"
+                android:hint="Veterinarian Name (optional)"
+                android:padding="12dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/hintTextColor" />
+
+            <EditText
+                android:id="@+id/editTextNotes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_text_background"
+                android:hint="Additional Notes"
+                android:lines="3"
+                android:padding="12dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/hintTextColor" />
+
+            <Button
+                android:id="@+id/buttonAdd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="@color/colorPrimary"
+                android:text="Add Health Record"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <!-- Health History Section -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="Health History"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/buttonAdd"
-        android:layout_below="@id/textViewTop">
+        android:layout_height="0dp"
+        android:layout_margin="10dp"
+        android:layout_weight="1" />
 
-    </androidx.recyclerview.widget.RecyclerView>
-
-    <Button
-        android:id="@+id/buttonAdd"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/textViewNoData"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerInParent="true"
-        android:background="@color/background"
-        android:text="Add new" />
+        android:layout_margin="20dp"
+        android:gravity="center"
+        android:text="No health records found"
+        android:textColor="@color/hintTextColor"
+        android:visibility="gone" />
 
-</RelativeLayout>
+</LinearLayout>

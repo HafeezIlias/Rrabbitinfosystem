@@ -15,69 +15,85 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.suffhillrabbitfarm.rabbitinfosystem.R;
+import com.suffhillrabbitfarm.rabbitinfosystem.adapters.WeightRecordAdapter;
 import com.suffhillrabbitfarm.rabbitinfosystem.data.ApiHelper;
 import com.suffhillrabbitfarm.rabbitinfosystem.data.LoginData;
+import com.suffhillrabbitfarm.rabbitinfosystem.models.WeightRecordModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class WeightRecordFragment extends Fragment {
 
-    EditText editTextWeight, editTextNotes;
+    EditText editTextWeight, editTextDate, editTextNotes;
     Button buttonAddWeight;
     RecyclerView recyclerViewWeights;
     TextView textViewNoData;
-    private String selectedDate;
+
     private String rabbitId;
     private LoginData loginData;
+    private WeightRecordAdapter adapter;
+    private List<WeightRecordModel> weightRecords;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_weight_record, container, false);
 
-        // Get rabbit ID from arguments - use correct parameter name
+        // Get rabbit ID from arguments
         if (getArguments() != null) {
             rabbitId = getArguments().getString("RabbitID");
         }
 
         loginData = new LoginData(getContext());
+        weightRecords = new ArrayList<>();
+
         initViews(view);
+        setupRecyclerView();
         loadWeightRecords();
 
         return view;
     }
 
     private void initViews(View view) {
-        // Note: Using available IDs from the layout - in a real implementation,
-        // you'd update the layout to have proper input fields
+        editTextWeight = view.findViewById(R.id.editTextWeight);
+        editTextDate = view.findViewById(R.id.editTextDate);
+        editTextNotes = view.findViewById(R.id.editTextNotes);
         buttonAddWeight = view.findViewById(R.id.buttonAdd);
         recyclerViewWeights = view.findViewById(R.id.recyclerView);
-        textViewNoData = view.findViewById(R.id.textViewTop);
-
-        // Set the header text
-        textViewNoData.setText("Weight Records for Rabbit: " + (rabbitId != null ? rabbitId : "Unknown"));
-
-        recyclerViewWeights.setLayoutManager(new LinearLayoutManager(getContext()));
-        buttonAddWeight.setOnClickListener(v -> showAddWeightDialog());
+        textViewNoData = view.findViewById(R.id.textViewNoData);
 
         // Set current date
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        selectedDate = sdf.format(Calendar.getInstance().getTime());
+        String currentDate = sdf.format(Calendar.getInstance().getTime());
+        editTextDate.setText(currentDate);
+
+        // Set up date picker
+        editTextDate.setOnClickListener(v -> showDatePicker());
+
+        // Set up add button
+        buttonAddWeight.setOnClickListener(v -> addWeightRecord());
     }
 
-    private void showAddWeightDialog() {
-        // Show date picker
+    private void setupRecyclerView() {
+        adapter = new WeightRecordAdapter(weightRecords);
+        recyclerViewWeights.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerViewWeights.setAdapter(adapter);
+    }
+
+    private void showDatePicker() {
         Calendar calendar = Calendar.getInstance();
         DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
                 (view, year, month, dayOfMonth) -> {
-                    selectedDate = year + "-" + String.format("%02d", month + 1) + "-"
+                    String selectedDate = year + "-" + String.format("%02d", month + 1) + "-"
                             + String.format("%02d", dayOfMonth);
-                    addWeightRecord();
+                    editTextDate.setText(selectedDate);
                 }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();
     }
@@ -88,21 +104,36 @@ public class WeightRecordFragment extends Fragment {
             return;
         }
 
-        // For demo purposes, using dummy values since UI elements are limited
-        // In a real implementation, you'd get these from EditText fields
-        String weightStr = "2.5";
-        String notes = "Regular checkup";
+        String weightStr = editTextWeight.getText().toString().trim();
+        String date = editTextDate.getText().toString().trim();
+        String notes = editTextNotes.getText().toString().trim();
+
+        if (weightStr.isEmpty()) {
+            Toast.makeText(getContext(), "Please enter weight", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (date.isEmpty()) {
+            Toast.makeText(getContext(), "Please select date", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         try {
             Double weight = Double.parseDouble(weightStr);
             String userUid = loginData.getUserUid();
 
-            ApiHelper.addWeightRecord(rabbitId, weight, selectedDate, notes, userUid,
+            ApiHelper.addWeightRecord(rabbitId, weight, date, notes, userUid,
                     new ApiHelper.ApiCallback() {
                         @Override
                         public void onSuccess(JSONObject response) {
                             Toast.makeText(getContext(), "Weight record added successfully", Toast.LENGTH_SHORT).show();
-                            loadWeightRecords(); // Reload the list
+
+                            // Clear form
+                            editTextWeight.setText("");
+                            editTextNotes.setText("");
+
+                            // Reload records
+                            loadWeightRecords();
                         }
 
                         @Override
@@ -111,14 +142,13 @@ public class WeightRecordFragment extends Fragment {
                         }
                     });
         } catch (NumberFormatException e) {
-            Toast.makeText(getContext(), "Invalid weight format", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Please enter a valid weight", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void loadWeightRecords() {
         if (rabbitId == null || rabbitId.isEmpty()) {
-            textViewNoData.setVisibility(View.VISIBLE);
-            recyclerViewWeights.setVisibility(View.GONE);
+            showNoData();
             return;
         }
 
@@ -126,28 +156,52 @@ public class WeightRecordFragment extends Fragment {
             @Override
             public void onSuccess(JSONObject response) {
                 try {
-                    JSONArray records = response.getJSONArray("data");
-                    if (records.length() > 0) {
-                        textViewNoData.setVisibility(View.GONE);
-                        recyclerViewWeights.setVisibility(View.VISIBLE);
-                        // TODO: Create and set adapter for weight records
-                        Toast.makeText(getContext(), "Found " + records.length() + " weight records",
-                                Toast.LENGTH_SHORT).show();
-                    } else {
-                        textViewNoData.setVisibility(View.VISIBLE);
-                        recyclerViewWeights.setVisibility(View.GONE);
+                    JSONArray records = response.getJSONArray("weight_records");
+                    weightRecords.clear();
+
+                    for (int i = 0; i < records.length(); i++) {
+                        JSONObject recordObj = records.getJSONObject(i);
+                        WeightRecordModel record = new WeightRecordModel();
+
+                        record.setId(recordObj.optString("id"));
+                        record.setRabbit_id(recordObj.optString("rabbit_id"));
+                        record.setWeight(recordObj.optString("weight"));
+                        record.setDate(recordObj.optString("date"));
+                        record.setNotes(recordObj.optString("notes"));
+                        record.setRecorded_by(recordObj.optString("recorded_by"));
+                        record.setCreated_at(recordObj.optString("created_at"));
+
+                        weightRecords.add(record);
                     }
+
+                    if (weightRecords.size() > 0) {
+                        showRecords();
+                        adapter.updateData(weightRecords);
+                    } else {
+                        showNoData();
+                    }
+
                 } catch (JSONException e) {
                     Toast.makeText(getContext(), "Error parsing response", Toast.LENGTH_SHORT).show();
+                    showNoData();
                 }
             }
 
             @Override
             public void onError(String error) {
-                textViewNoData.setVisibility(View.VISIBLE);
-                recyclerViewWeights.setVisibility(View.GONE);
                 Toast.makeText(getContext(), "Error loading records: " + error, Toast.LENGTH_SHORT).show();
+                showNoData();
             }
         });
+    }
+
+    private void showRecords() {
+        textViewNoData.setVisibility(View.GONE);
+        recyclerViewWeights.setVisibility(View.VISIBLE);
+    }
+
+    private void showNoData() {
+        textViewNoData.setVisibility(View.VISIBLE);
+        recyclerViewWeights.setVisibility(View.GONE);
     }
 }

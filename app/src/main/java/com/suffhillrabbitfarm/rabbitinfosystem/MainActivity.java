@@ -9,6 +9,11 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +36,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,8 +45,15 @@ public class MainActivity extends AppCompatActivity {
     List<RabbitModel> rml;
     RabbitAdapter rabbitAdapter;
     RecyclerView recyclerView;
-    TextView txtName, txtAccountType, txtTotalRabbits, txtHealthyCount, txtRecentCount;
+    TextView txtName, txtAccountType, txtTotalRabbits, txtHealthyCount, txtSickCount, txtRecentCount;
+    TextView txtFilterStatus;
+    Spinner spinnerFilterMonth, spinnerFilterYear;
+    Button btnApplyFilter, btnClearFilter;
     LoginData loginData;
+
+    // Filter variables
+    private String selectedMonth = "";
+    private String selectedYear = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +62,10 @@ public class MainActivity extends AppCompatActivity {
         initData();
         initViews();
         setupToolbar();
+        setupFilters();
         initRecyclerView();
         loadRabbits();
+        loadDashboardStats();
         getProfile();
     }
 
@@ -305,7 +320,16 @@ public class MainActivity extends AppCompatActivity {
         txtAccountType = findViewById(R.id.txtAccountType);
         txtTotalRabbits = findViewById(R.id.txtTotalRabbits);
         txtHealthyCount = findViewById(R.id.txtHealthyCount);
+        txtSickCount = findViewById(R.id.txtSickCount);
         txtRecentCount = findViewById(R.id.txtRecentCount);
+        txtFilterStatus = findViewById(R.id.txtFilterStatus);
+
+        // Filter components
+        spinnerFilterMonth = findViewById(R.id.spinnerFilterMonth);
+        spinnerFilterYear = findViewById(R.id.spinnerFilterYear);
+        btnApplyFilter = findViewById(R.id.btnApplyFilter);
+        btnClearFilter = findViewById(R.id.btnClearFilter);
+
         recyclerView = findViewById(R.id.recyclerView);
         addRabbitButton = findViewById(R.id.add_rabbit_button);
         addRabbitButton.setOnClickListener(v -> {
@@ -427,5 +451,136 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         loadRabbits();
+    }
+
+    private void setupFilters() {
+        // Setup month spinner
+        String[] months = { "All Months", "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December" };
+        ArrayAdapter<String> monthAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, months);
+        monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerFilterMonth.setAdapter(monthAdapter);
+
+        // Setup year spinner
+        List<String> years = new ArrayList<>();
+        years.add("All Years");
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        for (int i = currentYear; i >= currentYear - 5; i--) {
+            years.add(String.valueOf(i));
+        }
+        ArrayAdapter<String> yearAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, years);
+        yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerFilterYear.setAdapter(yearAdapter);
+
+        // Set up filter button listeners
+        btnApplyFilter.setOnClickListener(v -> applyFilters());
+        btnClearFilter.setOnClickListener(v -> clearFilters());
+    }
+
+    private void applyFilters() {
+        // Get selected values
+        String monthSelection = spinnerFilterMonth.getSelectedItem().toString();
+        String yearSelection = spinnerFilterYear.getSelectedItem().toString();
+
+        // Convert month name to number
+        selectedMonth = "";
+        if (!monthSelection.equals("All Months")) {
+            String[] months = { "January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December" };
+            for (int i = 0; i < months.length; i++) {
+                if (months[i].equals(monthSelection)) {
+                    selectedMonth = String.valueOf(i + 1);
+                    break;
+                }
+            }
+        }
+
+        // Set year
+        selectedYear = yearSelection.equals("All Years") ? "" : yearSelection;
+
+        // Update filter status
+        updateFilterStatus();
+
+        // Reload data with filters
+        loadDashboardStats();
+        loadRabbits();
+    }
+
+    private void clearFilters() {
+        selectedMonth = "";
+        selectedYear = "";
+        spinnerFilterMonth.setSelection(0);
+        spinnerFilterYear.setSelection(0);
+        updateFilterStatus();
+        loadDashboardStats();
+        loadRabbits();
+    }
+
+    private void updateFilterStatus() {
+        String status = "Showing all data";
+        if (!selectedMonth.isEmpty() || !selectedYear.isEmpty()) {
+            StringBuilder sb = new StringBuilder("Filtered by: ");
+            if (!selectedYear.isEmpty()) {
+                sb.append("Year ").append(selectedYear);
+            }
+            if (!selectedMonth.isEmpty()) {
+                if (!selectedYear.isEmpty())
+                    sb.append(", ");
+                String[] months = { "January", "February", "March", "April", "May", "June",
+                        "July", "August", "September", "October", "November", "December" };
+                sb.append("Month ").append(months[Integer.parseInt(selectedMonth) - 1]);
+            }
+            status = sb.toString();
+        }
+        txtFilterStatus.setText(status);
+    }
+
+    private void loadDashboardStats() {
+        String userUid = loginData.getUserUid();
+        if (userUid.isEmpty()) {
+            return;
+        }
+
+        // Build query parameters with filters
+        String queryParams = "user_uid=" + userUid;
+        if (!selectedMonth.isEmpty()) {
+            queryParams += "&month=" + selectedMonth;
+        }
+        if (!selectedYear.isEmpty()) {
+            queryParams += "&year=" + selectedYear;
+        }
+
+        android.util.Log.d("MainActivity", "Loading dashboard stats with params: " + queryParams);
+
+        ApiHelper.makeGetRequest("reports/get_dashboard_stats.php", queryParams, new ApiHelper.ApiCallback() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                try {
+                    if (response.getBoolean("success")) {
+                        JSONObject data = response.getJSONObject("data");
+
+                        // Update statistics
+                        txtTotalRabbits.setText(String.valueOf(data.optInt("total_rabbits", 0)));
+                        txtHealthyCount.setText(String.valueOf(data.optInt("healthy_rabbits", 0)));
+                        txtSickCount.setText(String.valueOf(data.optInt("sick_rabbits", 0)));
+                        txtRecentCount.setText(String.valueOf(data.optInt("recently_added", 0)));
+
+                        android.util.Log.d("MainActivity", "Dashboard stats updated successfully");
+                    } else {
+                        android.util.Log.e("MainActivity",
+                                "Dashboard stats API returned error: " + response.optString("message"));
+                    }
+                } catch (JSONException e) {
+                    android.util.Log.e("MainActivity", "Error parsing dashboard stats: " + e.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                android.util.Log.e("MainActivity", "Error loading dashboard stats: " + error);
+                // Fallback to simple statistics
+                updateStatistics();
+            }
+        });
     }
 }
