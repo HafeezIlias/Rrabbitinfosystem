@@ -31,6 +31,11 @@ public class MatingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mating, container, false);
 
+        // Get rabbit ID from bundle arguments
+        if (getArguments() != null) {
+            rabbitId = getArguments().getString("RabbitID");
+        }
+
         initViews(view);
         loadMatingRecords();
 
@@ -38,14 +43,23 @@ public class MatingFragment extends Fragment {
     }
 
     private void initViews(View view) {
-        editTextMateId = view.findViewById(R.id.textViewTop);
-        editTextMatingDate = view.findViewById(R.id.textViewTop);
-        editTextNotes = view.findViewById(R.id.textViewTop);
+        // Note: The current layout only has basic views, so we'll use what's available
+        // and show appropriate messages for missing functionality
+
         buttonAddMating = view.findViewById(R.id.buttonAdd);
         recyclerViewMating = view.findViewById(R.id.recyclerView);
         textViewNoData = view.findViewById(R.id.textViewTop);
 
-        buttonAddMating.setOnClickListener(v -> addMatingRecord());
+        // Set the header text
+        textViewNoData.setText("Mating Records for Rabbit: " + (rabbitId != null ? rabbitId : "Unknown"));
+
+        buttonAddMating.setOnClickListener(v -> {
+            // For now, just show a message since we don't have proper input fields
+            Toast.makeText(getContext(), "Add mating feature will be implemented with proper form fields",
+                    Toast.LENGTH_LONG).show();
+        });
+
+        loadMatingRecords();
     }
 
     private void addMatingRecord() {

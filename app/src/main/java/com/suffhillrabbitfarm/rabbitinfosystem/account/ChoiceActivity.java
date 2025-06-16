@@ -1,11 +1,11 @@
 package com.suffhillrabbitfarm.rabbitinfosystem.account;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.suffhillrabbitfarm.rabbitinfosystem.MainActivity;
@@ -28,6 +28,7 @@ public class ChoiceActivity extends AppCompatActivity {
         initData();
         initViews();
         setupUserInfo();
+        setupBackPressHandler();
     }
 
     private void initData() {
@@ -67,10 +68,14 @@ public class ChoiceActivity extends AppCompatActivity {
         }
     }
 
-    @SuppressLint("MissingSuperCall")
-    @Override
-    public void onBackPressed() {
-        startActivity(new Intent(ChoiceActivity.this, MainActivity.class));
-        finish();
+    private void setupBackPressHandler() {
+        // Modern way to handle back press instead of deprecated onBackPressed()
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                startActivity(new Intent(ChoiceActivity.this, MainActivity.class));
+                finish();
+            }
+        });
     }
 }

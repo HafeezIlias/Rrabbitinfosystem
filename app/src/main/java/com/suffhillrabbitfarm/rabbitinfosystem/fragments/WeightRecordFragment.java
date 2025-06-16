@@ -40,9 +40,9 @@ public class WeightRecordFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_weight_record, container, false);
 
-        // Get rabbit ID from arguments
+        // Get rabbit ID from arguments - use correct parameter name
         if (getArguments() != null) {
-            rabbitId = getArguments().getString("rabbitId", "");
+            rabbitId = getArguments().getString("RabbitID");
         }
 
         loginData = new LoginData(getContext());
@@ -58,6 +58,9 @@ public class WeightRecordFragment extends Fragment {
         buttonAddWeight = view.findViewById(R.id.buttonAdd);
         recyclerViewWeights = view.findViewById(R.id.recyclerView);
         textViewNoData = view.findViewById(R.id.textViewTop);
+
+        // Set the header text
+        textViewNoData.setText("Weight Records for Rabbit: " + (rabbitId != null ? rabbitId : "Unknown"));
 
         recyclerViewWeights.setLayoutManager(new LinearLayoutManager(getContext()));
         buttonAddWeight.setOnClickListener(v -> showAddWeightDialog());

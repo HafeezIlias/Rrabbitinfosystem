@@ -1,7 +1,7 @@
 package com.suffhillrabbitfarm.rabbitinfosystem.models;
 
 public class RabbitModel {
-    String rabbit_id, breed, color, gender, weight, dob, father_id, mother_id, observations;
+    String rabbit_id, breed, color, gender, weight, dob, father_id, mother_id, observations, cage_number;
 
     public String getRabbit_id() {
         return rabbit_id;
@@ -73,5 +73,13 @@ public class RabbitModel {
 
     public void setObservations(String observations) {
         this.observations = observations;
+    }
+
+    public String getCage_number() {
+        return cage_number;
+    }
+
+    public void setCage_number(String cage_number) {
+        this.cage_number = cage_number;
     }
 }

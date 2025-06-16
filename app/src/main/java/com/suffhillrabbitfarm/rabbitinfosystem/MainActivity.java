@@ -224,10 +224,36 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openActivity(String type, int position) {
-        Intent intent = new Intent(MainActivity.this, HostingActivity.class);
-        intent.putExtra("RabbitID", rml.get(position).getRabbit_id());
-        intent.putExtra("type", type);
-        startActivity(intent);
+        try {
+            RabbitModel rabbit = rml.get(position);
+            Intent intent = new Intent(MainActivity.this, HostingActivity.class);
+            intent.putExtra("RabbitID", rabbit.getRabbit_id());
+            intent.putExtra("type", type);
+
+            // Pass complete rabbit data as JSON string
+            try {
+                org.json.JSONObject rabbitJson = new org.json.JSONObject();
+                rabbitJson.put("rabbit_id", rabbit.getRabbit_id());
+                rabbitJson.put("breed", rabbit.getBreed());
+                rabbitJson.put("color", rabbit.getColor());
+                rabbitJson.put("gender", rabbit.getGender());
+                rabbitJson.put("weight", rabbit.getWeight());
+                rabbitJson.put("dob", rabbit.getDob());
+                rabbitJson.put("father_id", rabbit.getFather_id());
+                rabbitJson.put("mother_id", rabbit.getMother_id());
+                rabbitJson.put("observations", rabbit.getObservations());
+                rabbitJson.put("cage_number", rabbit.getCage_number());
+
+                intent.putExtra("RabbitData", rabbitJson.toString());
+            } catch (org.json.JSONException e) {
+                android.util.Log.e("MainActivity", "Error creating rabbit JSON: " + e.getMessage());
+            }
+
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(this, "Error opening " + type + ": " + e.getMessage(), Toast.LENGTH_LONG).show();
+            android.util.Log.e("MainActivity", "Error opening activity: " + e.getMessage(), e);
+        }
     }
 
     private void openDeleteAlert(int pos) {

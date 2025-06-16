@@ -33,6 +33,11 @@ public class HealthAndGrowthFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_health_and_growth, container, false);
 
+        // Get rabbit ID from bundle arguments
+        if (getArguments() != null) {
+            rabbitId = getArguments().getString("RabbitID");
+        }
+
         initViews(view);
         loadHealthRecords();
 
@@ -40,15 +45,23 @@ public class HealthAndGrowthFragment extends Fragment {
     }
 
     private void initViews(View view) {
-        editTextHealthDate = view.findViewById(R.id.textViewTop);
-        editTextHealthNotes = view.findViewById(R.id.textViewTop);
-        editTextTreatment = view.findViewById(R.id.textViewTop);
-        spinnerHealthStatus = view.findViewById(R.id.textViewTop);
+        // Note: The current layout only has basic views, so we'll use what's available
+        // and show appropriate messages for missing functionality
+
         buttonAddHealth = view.findViewById(R.id.buttonAdd);
         recyclerViewHealth = view.findViewById(R.id.recyclerView);
         textViewNoData = view.findViewById(R.id.textViewTop);
 
-        buttonAddHealth.setOnClickListener(v -> addHealthRecord());
+        // Set the header text
+        textViewNoData.setText("Health Records for Rabbit: " + (rabbitId != null ? rabbitId : "Unknown"));
+
+        buttonAddHealth.setOnClickListener(v -> {
+            // For now, just show a message since we don't have proper input fields
+            Toast.makeText(getContext(), "Add health record feature will be implemented with proper form fields",
+                    Toast.LENGTH_LONG).show();
+        });
+
+        loadHealthRecords();
     }
 
     private void addHealthRecord() {
